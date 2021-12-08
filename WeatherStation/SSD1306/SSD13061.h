@@ -51,6 +51,7 @@ void SSD1306_SendCommand(uint8_t command);
 void SSD1306_SendData(uint8_t *data, uint8_t dataLength);
 void SSD1306_ClearScreen();
 void SSD1306_PrintChar(uint8_t *character, uint8_t line, uint8_t margin);
+void SSD1306_PrintCustomSign(uint8_t *sign, uint8_t signWidth, uint8_t startingLine, uint8_t margin);
 uint8_t SSD1306_PrintString(char *stringData, uint8_t stringLength, uint8_t line);
 
 

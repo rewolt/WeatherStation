@@ -1,5 +1,5 @@
 /*
- * SHT3.c
+ * SHTC3.c
  *
  * Created: 07.12.2021 19:36:01
  *  Author: Rewolt

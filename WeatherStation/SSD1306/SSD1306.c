@@ -25,6 +25,8 @@ uint8_t ch_procent[] = {12, 50, 50, 12, 192, 240, 62, 14, 192, 240, 60, 15, 99, 
 uint8_t ch_degree[] = {0, 24, 60, 102, 102, 60, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0};								// degree	 (167)
 uint8_t ch_line[] = {0, 0, 0, 254, 254, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0};								// |		 (179)
 uint8_t ch_unknown[] = {254, 254, 254, 254, 254, 254, 254, 254, 255, 255, 255, 255, 255, 255, 255, 255};	// full square
+	
+
 
 void SSD1306_Init()
 {
@@ -113,8 +115,29 @@ void SSD1306_PrintChar(uint8_t *character, uint8_t line, uint8_t margin)
 	SSD1306_SendData(character, 16);
 }
 
-uint8_t SSD1306_PrintString(char *string, uint8_t stringLength, uint8_t line)
+
+void SSD1306_PrintCustomSign(uint8_t *sign, uint8_t signWidth, uint8_t startingLine, uint8_t margin)
 {
+	startingLine -= 1;
+	SSD1306_SendCommand(SSD1306_COLUMNADDR);
+	SSD1306_SendCommand(margin);
+	SSD1306_SendCommand(margin + signWidth - 1);
+	SSD1306_SendCommand(SSD1306_PAGEADDR);
+	SSD1306_SendCommand(startingLine);
+	SSD1306_SendCommand(startingLine + 1);
+	SSD1306_SendData(sign, signWidth * 2);
+}
+
+/*
+	Display has 8 pages (lines with 8 pixels height).
+	Characters are 2 lines height (16px x 8px).
+	This means we can draw characters between 1-st and 7-th line. 8-th line is reserved for bottom part of the characters addressed for 7-th line.
+ */
+uint8_t SSD1306_PrintString(char *string, uint8_t stringLength, uint8_t lineNumber)
+{
+	if(string == 0 || stringLength <= 0 || stringLength > 15 || lineNumber < 1 || lineNumber > 7)
+		return 0;
+	
 	uint8_t margin = 1;
 	uint8_t charSpace = 9;
 	
@@ -162,7 +185,7 @@ uint8_t SSD1306_PrintString(char *string, uint8_t stringLength, uint8_t line)
 		else
 			tableChar = ch_unknown;
 		
-		SSD1306_PrintChar(tableChar, (2 * line - 1), margin);
+		SSD1306_PrintChar(tableChar, lineNumber - 1, margin);
 		margin += charSpace;
 	}
 	

@@ -117,7 +117,7 @@
     <Compile Include="main.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SHTC3\SHT3.c">
+    <Compile Include="SHTC3\SHTC3.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SHTC3\SHTC3.h">

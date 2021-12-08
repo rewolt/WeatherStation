@@ -5,8 +5,8 @@
  * Author : Rewolt
  */ 
 
-#define TEMP_STR_LEN 7
-#define HUMID_STR_LEN 6
+#define TEMP_STR_LEN 10 //7
+#define HUMID_STR_LEN 9 //6
 
 #include "main.h"
 #include <avr/io.h>
@@ -16,9 +16,12 @@
 #include "SSD1306/SSD13061.h"
 #include "SHTC3/SHTC3.h"
 
-	uint8_t packet[6];
-	char tempString[TEMP_STR_LEN];
-	char humidString[HUMID_STR_LEN];
+uint8_t packet[6];
+char tempString[TEMP_STR_LEN];
+char humidString[HUMID_STR_LEN];
+
+uint8_t thermometer[] = {0, 0, 0, 0, 0, 248, 12, 134, 134, 12, 248, 0, 0, 0, 0, 0, 0, 0, 0, 62, 99, 65, 156, 191, 191, 156, 65, 99, 62, 0, 0, 0};
+uint8_t cloud_drizzle[] = {192, 32, 16, 16, 24, 4, 2, 2, 2, 4, 8, 48, 64, 64, 64, 128, 0, 97, 26, 2, 194, 50, 2, 2, 98, 26, 2, 194, 50, 2, 2, 1};
 
 int main(void)
 {
@@ -37,7 +40,10 @@ int main(void)
 		HumidToString(resultHumidity, humidString, HUMID_STR_LEN);
 		
 		SSD1306_PrintString(tempString, TEMP_STR_LEN, 2);
-		SSD1306_PrintString(humidString, HUMID_STR_LEN, 3);
+		SSD1306_PrintString(humidString, HUMID_STR_LEN, 5);
+		
+		SSD1306_PrintCustomSign(thermometer, 16, 2, 10);
+		SSD1306_PrintCustomSign(cloud_drizzle, 16, 5, 10);
     }
 }
 
