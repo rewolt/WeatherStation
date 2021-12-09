@@ -8,6 +8,11 @@
 #include "../TWI/TWI.h"
 #include "SHTC3.h"
 
+void SHTC3_Init()
+{
+	SHTC3_SendCommand(SHTC3_SLEEP);
+}
+
 void SHTC3_SendCommand(uint16_t command)
 {
 	uint8_t commnad_H = (command >> 8);

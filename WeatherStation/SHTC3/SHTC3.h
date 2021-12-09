@@ -19,6 +19,7 @@ enum SHTC3
 	SHTC3_READATA	= 0x7CA2
 };
 
+void SHTC3_Init();
 void SHTC3_SendCommand(uint16_t command);
 void SHTC3_Measure(uint8_t *packet);
 

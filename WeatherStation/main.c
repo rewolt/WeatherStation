@@ -29,24 +29,14 @@ int main(void)
 {
 	TWI_Setup();
 	SSD1306_Init();
+	SHTC3_Init();
 	INT0_Init();
 	
     while (1) 
     {
-		_delay_ms(1000);
-		
-		SHTC3_Measure(packet);
-		double resultTemperature = CalculateTemp(packet);
-		double resultHumidity = CalculateHumidity(packet);
-		
-		TempToString(resultTemperature, tempString, TEMP_STR_LEN);
-		HumidToString(resultHumidity, humidString, HUMID_STR_LEN);
-		
-		SSD1306_PrintString(tempString, TEMP_STR_LEN, 2);
-		SSD1306_PrintString(humidString, HUMID_STR_LEN, 5);
-		
-		SSD1306_PrintCustomSign(thermometer, 16, 2, 10);
-		SSD1306_PrintCustomSign(cloud_drizzle, 16, 5, 10);
+		// Always enter into sleep mode (power-down mode).
+		// Interrupt from INT0 can wake up the device.
+		MCUCR = (1 << SE) | (1 << SM1);
     }
 }
 
@@ -113,16 +103,33 @@ void HumidToString(double humidity, char *humidString, uint8_t strLength)
 
 void INT0_Init()
 {
+	DDRD = (1 << DDRD4);
 	GICR = (1 << INT0);
 	sei();
 }
 
 ISR(INT0_vect)
 {
-	SSD1306_ClearScreen();
-	SSD1306_PrintString(test, 5, 3);
+	SHTC3_SendCommand(SHTC3_WAKEUP);
+	_delay_ms(1);
+	SHTC3_Measure(packet);
+	SHTC3_SendCommand(SHTC3_SLEEP);
+	
+	double resultTemperature = CalculateTemp(packet);
+	double resultHumidity = CalculateHumidity(packet);
+	
+	TempToString(resultTemperature, tempString, TEMP_STR_LEN);
+	HumidToString(resultHumidity, humidString, HUMID_STR_LEN);
+	
+	SSD1306_PrintString(tempString, TEMP_STR_LEN, 2);
+	SSD1306_PrintString(humidString, HUMID_STR_LEN, 5);
+	
+	SSD1306_PrintCustomSign(thermometer, 16, 2, 10);
+	SSD1306_PrintCustomSign(cloud_drizzle, 16, 5, 10);
+	
+	SSD1306_SendCommand(SSD1306_DISPLAYON);
 	_delay_ms(5000);
-	SSD1306_ClearScreen();
+	SSD1306_SendCommand(SSD1306_DISPLAYOFF);
 }
 
 

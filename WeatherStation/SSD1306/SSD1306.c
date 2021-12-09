@@ -69,10 +69,6 @@ void SSD1306_Init()
 	
 	SSD1306_SendCommand(SSD1306_NORMALDISPLAY);
 	
-	SSD1306_ClearScreen();
-	
-	SSD1306_SendCommand(SSD1306_DISPLAYON);
-	
 }
 
 void SSD1306_SendCommand(uint8_t command)
