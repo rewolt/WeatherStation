@@ -5,8 +5,8 @@
  * Author : Rewolt
  */ 
 
-#define TEMP_STR_LEN 10 //7
-#define HUMID_STR_LEN 9 //6
+#define TEMP_STR_LEN 10
+#define HUMID_STR_LEN 9
 
 #include "main.h"
 #include <avr/io.h>
@@ -23,7 +23,6 @@ char humidString[HUMID_STR_LEN];
 
 uint8_t thermometer[] = {0, 0, 0, 0, 0, 248, 12, 134, 134, 12, 248, 0, 0, 0, 0, 0, 0, 0, 0, 62, 99, 65, 156, 191, 191, 156, 65, 99, 62, 0, 0, 0};
 uint8_t cloud_drizzle[] = {192, 32, 16, 16, 24, 4, 2, 2, 2, 4, 8, 48, 64, 64, 64, 128, 0, 97, 26, 2, 194, 50, 2, 2, 98, 26, 2, 194, 50, 2, 2, 1};
-char test[] = {'1','2','3','4','5'};
 
 int main(void)
 {
@@ -103,9 +102,9 @@ void HumidToString(double humidity, char *humidString, uint8_t strLength)
 
 void INT0_Init()
 {
-	DDRD = (1 << DDRD4);
-	GICR = (1 << INT0);
-	sei();
+	DDRD = (1 << DDRD4);	// activated pull-up resistors
+	GICR = (1 << INT0);		// enabled INT0 interrupt
+	sei();					// enabled global interrupts
 }
 
 ISR(INT0_vect)
