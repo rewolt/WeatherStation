@@ -9,6 +9,7 @@ double CalculateTemp(uint8_t *packet);
 double CalculateHumidity(uint8_t *packet);
 void TempToString(double temperature, char *tempString, uint8_t strLength);
 void HumidToString(double humidity, char *humidString, uint8_t strLength);
+void ShowError();
 
 #endif
 

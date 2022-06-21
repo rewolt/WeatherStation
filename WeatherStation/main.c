@@ -13,6 +13,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdlib.h>
+#include <avr/wdt.h>
 #include "TWI/TWI.h"
 #include "SSD1306/SSD13061.h"
 #include "SHTC3/SHTC3.h"
@@ -23,6 +24,9 @@ char humidString[HUMID_STR_LEN];
 
 uint8_t thermometer[] = {0, 0, 0, 0, 0, 248, 12, 134, 134, 12, 248, 0, 0, 0, 0, 0, 0, 0, 0, 62, 99, 65, 156, 191, 191, 156, 65, 99, 62, 0, 0, 0};
 uint8_t cloud_drizzle[] = {192, 32, 16, 16, 24, 4, 2, 2, 2, 4, 8, 48, 64, 64, 64, 128, 0, 97, 26, 2, 194, 50, 2, 2, 98, 26, 2, 194, 50, 2, 2, 1};
+	
+double counter = 0;
+char counterString[TEMP_STR_LEN];
 
 int main(void)
 {
@@ -30,6 +34,14 @@ int main(void)
 	SSD1306_Init();
 	SHTC3_Init();
 	INT0_Init();
+	sei();		// enabled global interrupts
+	
+	
+	SSD1306_SendCommand(SSD1306_DISPLAYON);
+	SSD1306_PrintString("0123456789...", 13, 1);
+	_delay_ms(1000);
+	SSD1306_SendCommand(SSD1306_DISPLAYOFF);
+	SSD1306_ClearScreen();
 	
     while (1) 
     {
@@ -102,13 +114,13 @@ void HumidToString(double humidity, char *humidString, uint8_t strLength)
 
 void INT0_Init()
 {
-	DDRD = (1 << DDRD4);	// activated pull-up resistors
+	DDRD = (0 << DDRD4);	// set as input	
+	PORTD = (1 << PORTD4);	// activated pull-up resistor
 	GICR = (1 << INT0);		// enabled INT0 interrupt
-	sei();					// enabled global interrupts
 }
 
 ISR(INT0_vect)
-{
+{	
 	SHTC3_SendCommand(SHTC3_WAKEUP);
 	_delay_ms(1);
 	SHTC3_Measure(packet);
@@ -129,6 +141,17 @@ ISR(INT0_vect)
 	SSD1306_SendCommand(SSD1306_DISPLAYON);
 	_delay_ms(5000);
 	SSD1306_SendCommand(SSD1306_DISPLAYOFF);
+}
+
+
+void ShowError()
+{
+	SSD1306_ClearScreen();
+	SSD1306_PrintString("||||||||||", TEMP_STR_LEN, 5);
+	SSD1306_SendCommand(SSD1306_DISPLAYON);
+	_delay_ms(5000);
+	SSD1306_SendCommand(SSD1306_DISPLAYOFF);
+	SSD1306_ClearScreen();
 }
 
 

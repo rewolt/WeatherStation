@@ -19,8 +19,8 @@ enum SHTC3
 	SHTC3_READATA	= 0x7CA2
 };
 
-void SHTC3_Init();
-void SHTC3_SendCommand(uint16_t command);
-void SHTC3_Measure(uint8_t *packet);
+enum TWI_Status_t SHTC3_Init();
+enum TWI_Status_t SHTC3_SendCommand(uint16_t command);
+enum TWI_Status_t SHTC3_Measure(uint8_t *packet);
 
 #endif /* SHTC3_H_ */

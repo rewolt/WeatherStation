@@ -20,6 +20,7 @@ uint8_t ch_8[] = {56, 124, 206, 134, 134, 206, 124, 56, 62, 127, 227, 193, 193, 
 uint8_t ch_9[] = {240, 252, 142, 6, 6, 14, 252, 248, 0, 193, 195, 195, 195, 115, 63, 15};					//9			 (57)
 uint8_t ch_minus[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};										// minus (-) (45)
 uint8_t ch_comma[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 176, 112, 0, 0, 0};									// comma (,) (44)
+uint8_t ch_dot[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 112, 112, 112, 0, 0, 0};									// dot (.)   (46)
 uint8_t ch_C[] = {248, 252, 14, 6, 6, 14, 12, 0, 63, 127, 224, 192, 192, 224, 96, 32};						// C		 (67)
 uint8_t ch_procent[] = {12, 50, 50, 12, 192, 240, 62, 14, 192, 240, 60, 15, 99, 152, 152, 96};				// percent	 (37)
 uint8_t ch_degree[] = {0, 24, 60, 102, 102, 60, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0};								// degree	 (167)
@@ -169,6 +170,8 @@ uint8_t SSD1306_PrintString(char *string, uint8_t stringLength, uint8_t lineNumb
 			tableChar = ch_minus;
 		else if (character == 44)
 			tableChar = ch_comma;
+		else if (character == 46)
+			tableChar = ch_dot;
 		else if (character == 67)
 			tableChar = ch_C;
 		else if (character == 67)
